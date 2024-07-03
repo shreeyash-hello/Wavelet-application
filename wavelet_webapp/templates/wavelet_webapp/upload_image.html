@@ -1,0 +1,17 @@
+<!-- wavelet_webapp/templates/upload_image.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Image</title>
+</head>
+<body>
+    <h2>Upload an Image</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br><br>
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!-- wavelet_webapp/templates/display_images.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display Images and Wavelet Coefficients</title>
+</head>
+<body>
+    <h2>Processed Images</h2>
+
+    <h3>Original Image</h3>
+    <img src="{{ original_image_url }}" alt="Original Image">
+
+    <h3>Approximate Coefficients (cA)</h3>
+    <img src="{{ cA_url }}" alt="Approximate Coefficients">
+
+    <h3>Horizontal Detail Coefficients (cH)</h3>
+    <img src="{{ cH_url }}" alt="Horizontal Detail Coefficients">
+
+    <h3>Vertical Detail Coefficients (cV)</h3>
+    <img src="{{ cV_url }}" alt="Vertical Detail Coefficients">
+
+    <h3>Diagonal Detail Coefficients (cD)</h3>
+    <img src="{{ cD_url }}" alt="Diagonal Detail Coefficients">
+
+    <h3>Reconstructed Image</h3>
+    <img src="{{ reconstructed_image_url }}" alt="Reconstructed Image">
+</body>
+</html>
