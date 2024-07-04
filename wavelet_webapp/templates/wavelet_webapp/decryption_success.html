@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Decryption Successful</title>
+</head>
+<body>
+    <h1>Decryption Successful</h1>
+    <h2>Decrypted Image:</h2>
+    <img src="{{ decrypted_image_path }}" alt="Decrypted Image" style="max-width: 50%;"><br><br>
+
+    <p><a href="{{ decrypted_image_path }}" download>Download Decrypted Image</a></p>
+
+    <!-- Button to go to the home page -->
+    <form action="{% url 'home' %}" method="get">
+        <button type="submit">Go to Home</button>
+    </form>
+</body>
+</html>

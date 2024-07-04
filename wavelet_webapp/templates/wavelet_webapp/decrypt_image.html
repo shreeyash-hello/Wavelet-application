@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Decrypt Image</title>
+</head>
+<body>
+    <h1>Decrypt Image</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="npz_file">Upload encrypted_data.npz:</label><br>
+        <input type="file" id="npz_file" name="npz_file"><br><br>
+        <button type="submit">Decrypt Image</button>
+    </form>
+</body>
+</html>

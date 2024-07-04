@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Encryption Successful</title>
+</head>
+<body>
+    <h1>Encryption Successful</h1>
+    <h2>Encrypted Image:</h2>
+    <img src="{{ encrypted_data.encrypted_image.url }}" alt="Encrypted Image" style="max-width: 50%;"><br><br>
+
+    <h2>Download Encrypted Data:</h2>
+    <p><a href="{{ encrypted_data.npz_file.url }}" download>Download encrypted_data.npz</a></p>
+
+    <form action="{% url 'decrypt_image' %}" method="get">
+        <button type="submit">Go to Decrypt Image</button>
+    </form>
+</body>
+</html>

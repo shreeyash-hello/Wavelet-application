@@ -1,17 +1,22 @@
-<!-- wavelet_webapp/templates/upload_image.html -->
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Upload Image</title>
 </head>
 <body>
-    <h2>Upload an Image</h2>
+    <h1>Upload Image</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <br><br>
-        <input type="submit" value="Upload">
+        <button type="submit">Upload</button>
     </form>
+
+    <h1>Decrypt Image</h1>
+    <form action="{% url 'decrypt_image' %}" method="get">
+        <button type="submit">Decrypt Encrypted Data</button>
+    </form>
+
 </body>
 </html>
+

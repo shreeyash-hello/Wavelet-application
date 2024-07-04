@@ -1,7 +1,7 @@
 from django import forms
-from .models import ImageModel
+from .models import UploadedImage
 
-class ImageForm(forms.ModelForm):
+class UploadImageForm(forms.ModelForm):
     class Meta:
-        model = ImageModel
+        model = UploadedImage
         fields = ['image']
