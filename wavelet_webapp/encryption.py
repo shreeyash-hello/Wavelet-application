@@ -10,7 +10,6 @@ def logistic_map(x, r, size):
     return seq
 
 def chaotic_wavelet_encrypt(image, wavelet='haar', level=1, r=3.9):
-    # Perform wavelet decomposition
     coeffs = pywt.wavedec2(image, wavelet, level=level)
     coeff_arr, coeff_slices = pywt.coeffs_to_array(coeffs)
 
