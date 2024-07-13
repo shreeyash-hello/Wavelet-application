@@ -11,6 +11,8 @@
 
     <p><a href="{{ decrypted_image_path }}" download>Download Decrypted Image</a></p>
 
+    <h2>PSNR Value: {{ psnr_value }} dB</h2>
+
     <form action="{% url 'home' %}" method="get">
         <button type="submit">Go to Home</button>
     </form>

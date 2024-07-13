@@ -5,7 +5,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from .models import UploadedImage, EncryptedData
 from .forms import UploadImageForm
-from .encryption import chaotic_wavelet_encrypt, chaotic_wavelet_decrypt
+from .encryption import chaotic_wavelet_encrypt, chaotic_wavelet_decrypt, resize_image, psnr
 
 
 def home_view(request):
@@ -31,9 +31,16 @@ def encrypt_image(request, uploaded_image_id):
         image = plt.imread(image_path)
 
         if image.ndim == 3:
-            image = np.mean(image, axis=2).astype(np.float32)
+            r, g, b = image[:, :, 0], image[:, :, 1], image[:, :, 2]
+            image = (0.299 * r + 0.587 * g + 0.114 * b).astype(np.float32)
 
         encrypted_image, permuted_indices = chaotic_wavelet_encrypt(image)
+
+        encrypted_image = resize_image(encrypted_image, image.shape)
+
+        original_image_path = os.path.join(settings.MEDIA_ROOT, 'original', 'original_image.npy')
+        os.makedirs(os.path.dirname(original_image_path), exist_ok=True)
+        np.save(original_image_path, image)
 
         encrypted_image_path = os.path.join(settings.MEDIA_ROOT, 'encrypted', 'encrypted_image.png')
         os.makedirs(os.path.dirname(encrypted_image_path), exist_ok=True)
@@ -68,8 +75,16 @@ def decrypt_image(request):
         os.makedirs(os.path.dirname(decrypted_image_path), exist_ok=True)
         plt.imsave(decrypted_image_path, decrypted_image, cmap='gray')
 
+        original_image_path = os.path.join(settings.MEDIA_ROOT, 'original', 'original_image.npy')
+        original_image = np.load(original_image_path)
+
+        decrypted_image = resize_image(decrypted_image, original_image.shape)
+
+        psnr_value = psnr(original_image, decrypted_image)
+
         decrypted_image_url = os.path.join(settings.MEDIA_URL, 'decrypted', 'decrypted_image.png')
 
-        return render(request, 'wavelet_webapp/decryption_success.html', {'decrypted_image_path': decrypted_image_url})
+        return render(request, 'wavelet_webapp/decryption_success.html',
+                      {'decrypted_image_path': decrypted_image_url, 'psnr_value': psnr_value})
 
     return render(request, 'wavelet_webapp/decrypt_image.html')

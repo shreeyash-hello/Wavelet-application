@@ -1,5 +1,6 @@
 import numpy as np
 import pywt
+from skimage.transform import resize
 import matplotlib.pyplot as plt
 
 def logistic_map(x, r, size):
@@ -42,3 +43,14 @@ def chaotic_wavelet_decrypt(encrypted_image, permuted_indices, wavelet='haar', l
     decrypted_image = pywt.waverec2(decrypted_coeffs, wavelet)
 
     return decrypted_image
+
+def resize_image(image, target_shape):
+    return resize(image, target_shape, mode='reflect', anti_aliasing=True)
+
+def psnr(original, decrypted):
+    mse = np.mean((original - decrypted) ** 2)
+    if mse == 0:  # Means no difference between the images
+        return float('inf')
+    max_pixel = 255.0
+    psnr_value = 20 * np.log10(max_pixel / np.sqrt(mse))
+    return psnr_value
