@@ -6,6 +6,9 @@ from django.shortcuts import render, redirect
 from .models import UploadedImage, EncryptedData
 from .forms import UploadImageForm
 from .encryption import chaotic_wavelet_encrypt, chaotic_wavelet_decrypt, resize_image, psnr
+from .compression import compress_image, decompress_image, calculate_compression_ratio, calculate_psnr
+import os
+from PIL import Image
 
 
 def home_view(request):
@@ -17,7 +20,11 @@ def upload_image(request):
         form = UploadImageForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_image = form.save()
-            return redirect('encrypt_image', uploaded_image_id=uploaded_image.id)
+            operation = form.cleaned_data['operation']
+            if operation == 'encrypt':
+                return redirect('encrypt_image', uploaded_image_id=uploaded_image.id)
+            elif operation == 'compress':
+                return redirect('compress_image', uploaded_image_id=uploaded_image.id)
     else:
         form = UploadImageForm()
     return render(request, 'wavelet_webapp/upload_image.html', {'form': form})
@@ -88,3 +95,42 @@ def decrypt_image(request):
                       {'decrypted_image_path': decrypted_image_url, 'psnr_value': psnr_value})
 
     return render(request, 'wavelet_webapp/decrypt_image.html')
+
+
+def compress_image_view(request, uploaded_image_id):
+    uploaded_image = UploadedImage.objects.get(pk=uploaded_image_id)
+
+    if request.method == 'POST':
+        # Load the uploaded image
+        image_path = uploaded_image.image.path
+        original_image = Image.open(image_path).convert('L')
+        original_array = np.array(original_image)
+
+        # Compress the image
+        encoded_coeffs, wavelet_coeffs, original_size, compressed_size = compress_image(original_array)
+
+        # Decompress the image
+        decompressed_image = decompress_image(encoded_coeffs, wavelet_coeffs, original_array.shape)
+
+        # Save the decompressed image
+        decompressed_image_path = os.path.join(settings.MEDIA_ROOT, 'decompressed', 'decompressed_image.png')
+        os.makedirs(os.path.dirname(decompressed_image_path), exist_ok=True)
+        decompressed_image.save(decompressed_image_path)
+
+        # Calculate compression ratio and PSNR
+        compression_ratio = calculate_compression_ratio(original_size, compressed_size)
+        psnr_value = calculate_psnr(original_array, np.array(decompressed_image))
+
+        # Construct the URL for the decompressed image
+        decompressed_image_url = os.path.join(settings.MEDIA_URL, 'decompressed', 'decompressed_image.png')
+
+        return render(request, 'wavelet_webapp/compression_success.html', {
+            'decompressed_image_path': decompressed_image_url,
+            'compression_ratio': compression_ratio,
+            'psnr_value': psnr_value,
+            'original_size': original_size,
+            'compressed_size': compressed_size
+        })
+
+    return render(request, 'wavelet_webapp/compress_image.html', {'uploaded_image': uploaded_image})
+
