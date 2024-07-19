@@ -7,11 +7,9 @@
 <body>
     <h1>Compress Image</h1>
 
-    <!-- Display the uploaded image -->
     <h2>Uploaded Image:</h2>
     <img src="{{ uploaded_image.image.url }}" alt="Uploaded Image" style="max-width: 50%;"><br><br>
 
-    <!-- Form to choose compression options -->
     <form method="post" action="{% url 'compress_image' uploaded_image.id %}">
         {% csrf_token %}
         <input type="submit" value="Compress Image">

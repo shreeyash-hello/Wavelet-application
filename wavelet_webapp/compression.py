@@ -9,7 +9,6 @@ def dequantize(quantized_coefficients, quantization_factor):
     return quantized_coefficients * quantization_factor
 
 def entropy_encode(data):
-    # Use simple RLE encoding as an example
     encoded = []
     previous_value = data[0]
     count = 1
@@ -41,43 +40,34 @@ def calculate_psnr(original_image, decompressed_image):
     return psnr
 
 def compress_image(image_array, wavelet='bior2.2', quantization_factor=10):
-    # Perform multiwavelet transform
     coeffs = pywt.dwtn(image_array, wavelet)
 
-    # Quantize the coefficients
     quantized_coeffs = {}
     for key in coeffs.keys():
         quantized_coeffs[key] = quantize(coeffs[key], quantization_factor)
 
-    # Flatten and entropy encode the quantized coefficients
     encoded_coeffs = {}
     for key in quantized_coeffs.keys():
         encoded_coeffs[key] = entropy_encode(quantized_coeffs[key].flatten())
 
-    # Calculate sizes for compression ratio
     original_size = image_array.size
     compressed_size = sum(len(encoded) for encoded in encoded_coeffs.values())
 
     return encoded_coeffs, coeffs, original_size, compressed_size
 
 def decompress_image(encoded_coeffs, wavelet_coeffs, shape_image, wavelet='bior2.2', quantization_factor=10):
-    # Entropy decode the coefficients
     quantized_coeffs = {}
     for key in encoded_coeffs.keys():
         quantized_coeffs[key] = entropy_decode(encoded_coeffs[key]).reshape(wavelet_coeffs[key].shape)
 
-    # De-quantize the coefficients
     coeffs = {}
     for key in quantized_coeffs.keys():
         coeffs[key] = dequantize(quantized_coeffs[key], quantization_factor)
 
-    # Perform inverse multiwavelet transform
     reconstructed_image = pywt.idwtn(coeffs, wavelet)
 
-    # Clip to ensure valid pixel range and convert to uint8
     reconstructed_image = np.clip(reconstructed_image, 0, 255).astype(np.uint8)
 
-    # Convert numpy array back to Pillow Image
     decompressed_image = Image.fromarray(reconstructed_image)
 
     return decompressed_image

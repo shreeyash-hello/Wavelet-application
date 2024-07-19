@@ -101,27 +101,21 @@ def compress_image_view(request, uploaded_image_id):
     uploaded_image = UploadedImage.objects.get(pk=uploaded_image_id)
 
     if request.method == 'POST':
-        # Load the uploaded image
         image_path = uploaded_image.image.path
         original_image = Image.open(image_path).convert('L')
         original_array = np.array(original_image)
 
-        # Compress the image
         encoded_coeffs, wavelet_coeffs, original_size, compressed_size = compress_image(original_array)
 
-        # Decompress the image
         decompressed_image = decompress_image(encoded_coeffs, wavelet_coeffs, original_array.shape)
 
-        # Save the decompressed image
         decompressed_image_path = os.path.join(settings.MEDIA_ROOT, 'decompressed', 'decompressed_image.png')
         os.makedirs(os.path.dirname(decompressed_image_path), exist_ok=True)
         decompressed_image.save(decompressed_image_path)
 
-        # Calculate compression ratio and PSNR
         compression_ratio = calculate_compression_ratio(original_size, compressed_size)
         psnr_value = calculate_psnr(original_array, np.array(decompressed_image))
 
-        # Construct the URL for the decompressed image
         decompressed_image_url = os.path.join(settings.MEDIA_URL, 'decompressed', 'decompressed_image.png')
 
         return render(request, 'wavelet_webapp/compression_success.html', {
