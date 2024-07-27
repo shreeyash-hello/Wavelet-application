@@ -1,6 +1,6 @@
 from django import forms
 from .models import UploadedImage
-
+from django.core.exceptions import ValidationError
 
 class UploadImageForm(forms.ModelForm):
     OPERATION_CHOICES = [
@@ -13,3 +13,4 @@ class UploadImageForm(forms.ModelForm):
     class Meta:
         model = UploadedImage
         fields = ['image', 'operation']
+
