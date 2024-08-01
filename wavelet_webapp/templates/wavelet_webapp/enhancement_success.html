@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+</head>
+<body>
+    <h1>Results</h1>
+
+    <h2>Original Image</h2>
+    <img src="data:image/png;base64,{{ original_image }}" alt="Original Image">
+
+    <h2>Noisy Image</h2>
+    <img src="data:image/png;base64,{{ noisy_image }}" alt="Noisy Image">
+
+    <h2>Best Denoised Image (PSNR)</h2>
+    <img src="data:image/png;base64,{{ best_denoised_psnr }}" alt="Best Denoised Image (PSNR)">
+
+    <h2>Best Denoised Image (SSIM)</h2>
+    <img src="data:image/png;base64,{{ best_denoised_ssim }}" alt="Best Denoised Image (SSIM)">
+
+    <h2>Results Summary</h2>
+    <p>Operation Selected: {{ operation }}</p>
+    <p>Best PSNR: {{ best_psnr }}</p>
+    <p>Best Parameters for PSNR: Wavelet={{ best_params_psnr.0 }}, Level={{ best_params_psnr.1 }}, Threshold={{ best_params_psnr.2 }}, Mode={{ best_params_psnr.3 }}</p>
+    <p>Best SSIM: {{ best_ssim }}</p>
+    <p>Best Parameters for SSIM: Wavelet={{ best_params_ssim.0 }}, Level={{ best_params_ssim.1 }}, Threshold={{ best_params_ssim.2 }}, Mode={{ best_params_ssim.3 }}</p>
+
+    <a href="{% url 'home' %}">Go to Home</a>
+</body>
+</html>

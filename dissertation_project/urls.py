@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from wavelet_webapp import views as wavelet_views
 from django.conf.urls.static import static
 
@@ -10,7 +10,8 @@ urlpatterns = [
     path('encrypt/<int:uploaded_image_id>/', wavelet_views.encrypt_image, name='encrypt_image'),
     path('decrypt/', wavelet_views.decrypt_image, name='decrypt_image'),
     path('compress/<int:uploaded_image_id>/', wavelet_views.compress_image_view, name='compress_image'),
-    path('', wavelet_views.home_view, name='home'),  # Define a default view for the root URL
+    path('enhance/<int:uploaded_image_id>/', wavelet_views.process_image, name='enhance_image'),
+    path('', wavelet_views.home_view, name='home'),
 ]
 
 if settings.DEBUG:

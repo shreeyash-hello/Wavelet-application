@@ -2,17 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Compress Image</title>
+    <title>Denoise Image</title>
 </head>
 <body>
-    <h1>Compress Image</h1>
-
+    <h1>Denoise Image</h1>
     <h2>Uploaded Image:</h2>
     <img src="{{ uploaded_image.image.url }}" alt="Uploaded Image" style="max-width: 50%;"><br><br>
 
-    <form method="post" action="{% url 'compress_image' uploaded_image.id %}">
+    <form method="post" action="{% url 'enhance_image' uploaded_image.id %}">
         {% csrf_token %}
-        <input type="submit" value="Compress Image">
+        <input type="submit" value="Denoise Image">
     </form>
 </body>
 </html>

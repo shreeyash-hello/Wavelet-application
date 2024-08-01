@@ -1,12 +1,21 @@
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 from django.conf import settings
 from django.shortcuts import render, redirect
+from django.shortcuts import render
+import numpy as np
+import pywt
+import matplotlib.pyplot as plt
+import PIL.Image
+import base64
+from io import BytesIO
+from .enhancement import nl_means_denoising, compute_psnr, compute_ssim, wavelet_denoising, add_gaussian_noise
 from .models import UploadedImage, EncryptedData
 from .forms import UploadImageForm
 from .encryption import chaotic_wavelet_encrypt, chaotic_wavelet_decrypt, resize_image, psnr
 from .compression import compress_image, decompress_image, calculate_compression_ratio, calculate_psnr
+from skimage import io, img_as_float, metrics
+from skimage.restoration import denoise_nl_means
 import os
 import rawpy
 from PIL import Image
@@ -25,6 +34,8 @@ def upload_image(request):
                 return redirect('encrypt_image', uploaded_image_id=uploaded_image.id)
             elif operation == 'compress':
                 return redirect('compress_image', uploaded_image_id=uploaded_image.id)
+            elif operation == 'enhance':
+                return redirect('enhance_image', uploaded_image_id=uploaded_image.id)
     else:
         form = UploadImageForm()
     return render(request, 'wavelet_webapp/upload_image.html', {'form': form})
@@ -104,10 +115,8 @@ def compress_image_view(request, uploaded_image_id):
         image_path = uploaded_image.image.path
 
         with rawpy.imread(image_path) as raw:
-            # Convert the raw data to a NumPy array
             rgb_array = raw.postprocess()
 
-            # rgb_array now contains the image data
         rgb_image = Image.fromarray(rgb_array)
         grayscale_image = rgb_image.convert('L')
         original_array = np.array(grayscale_image)
@@ -132,4 +141,81 @@ def compress_image_view(request, uploaded_image_id):
         })
 
     return render(request, 'wavelet_webapp/compress_image.html', {'uploaded_image': uploaded_image})
+
+
+def process_image(request, uploaded_image_id):
+    uploaded_image = UploadedImage.objects.get(pk=uploaded_image_id)
+    if request.method == 'POST':
+        image_path = uploaded_image.image.path
+
+
+        image = PIL.Image.open(image_path).convert('L')
+        image_float = img_as_float(np.array(image))
+
+        noisy_image = add_gaussian_noise(image_float, mean=0, var=0.01)
+
+        wavelets = ['db1', 'db2', 'sym2', 'haar']
+        levels = [1, 2]
+        threshold_factors = [0.1, 0.2]
+        threshold_modes = ['soft', 'hard']
+
+        best_psnr = -np.inf
+        best_ssim = -np.inf
+        best_params_psnr = None
+        best_params_ssim = None
+        best_denoised_psnr = None
+        best_denoised_ssim = None
+
+        for wavelet in wavelets:
+            for level in levels:
+                for threshold_factor in threshold_factors:
+                    for threshold_mode in threshold_modes:
+                        denoised_image = wavelet_denoising(noisy_image, wavelet=wavelet, level=level,
+                                                               threshold_factor=threshold_factor,
+                                                               threshold_mode=threshold_mode)
+                        psnr = compute_psnr(image_float, denoised_image)
+                        ssim = compute_ssim(image_float, denoised_image)
+
+                        if psnr > best_psnr:
+                            best_psnr = psnr
+                            best_params_psnr = (wavelet, level, threshold_factor, threshold_mode)
+                            best_denoised_psnr = denoised_image
+
+                        if ssim > best_ssim:
+                            best_ssim = ssim
+                            best_params_ssim = (wavelet, level, threshold_factor, threshold_mode)
+                            best_denoised_ssim = denoised_image
+
+        denoised_image_nl_means = nl_means_denoising(noisy_image)
+        psnr_nl_means = compute_psnr(image_float, denoised_image_nl_means)
+        ssim_nl_means = compute_ssim(image_float, denoised_image_nl_means)
+
+        if psnr_nl_means > best_psnr:
+            best_psnr = psnr_nl_means
+            best_denoised_psnr = denoised_image_nl_means
+
+        if ssim_nl_means > best_ssim:
+            best_ssim = ssim_nl_means
+            best_denoised_ssim = denoised_image_nl_means
+
+        def image_to_base64(image):
+            buf = BytesIO()
+            plt.imsave(buf, image, format='png', cmap='gray')
+            buf.seek(0)
+            return base64.b64encode(buf.getvalue()).decode('utf-8')
+
+        context = {
+                'original_image': image_to_base64(image_float),
+                'noisy_image': image_to_base64(noisy_image),
+                'best_denoised_psnr': image_to_base64(best_denoised_psnr),
+                'best_denoised_ssim': image_to_base64(best_denoised_ssim),
+                'best_psnr': best_psnr,
+                'best_ssim': best_ssim,
+                'best_params_psnr': best_params_psnr,
+                'best_params_ssim': best_params_ssim,
+        }
+
+        return render(request, 'wavelet_webapp/enhancement_success.html', context)
+
+    return render(request, 'wavelet_webapp/enhance_image.html', {'uploaded_image': uploaded_image})
 
