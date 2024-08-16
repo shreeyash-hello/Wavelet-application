@@ -7,7 +7,7 @@ def add_gaussian_noise(image, mean=0, var=0.01):
     sigma = np.sqrt(var)
     noise = np.random.normal(mean, sigma, image.shape)
     noisy_image = image + noise
-    return np.clip(noisy_image, 0, 1)
+    return noisy_image
 
 def wavelet_denoising(image, wavelet='db1', level=2, threshold_factor=0.2, threshold_mode='soft'):
     coeffs = pywt.wavedec2(image, wavelet, level=level)
@@ -17,7 +17,7 @@ def wavelet_denoising(image, wavelet='db1', level=2, threshold_factor=0.2, thres
     coeffs_thresh = list(coeffs)
     coeffs_thresh[1:] = [tuple(pywt.threshold(c, threshold, mode=threshold_mode) for c in subcoeffs) for subcoeffs in coeffs_thresh[1:]]
     denoised_image = pywt.waverec2(coeffs_thresh, wavelet)
-    return np.clip(denoised_image, 0, 1)
+    return denoised_image
 
 def nl_means_denoising(image, patch_size=5, patch_distance=6, h=0.1):
     return denoise_nl_means(image, patch_size=patch_size, patch_distance=patch_distance, h=h)

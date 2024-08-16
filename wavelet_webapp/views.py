@@ -154,7 +154,7 @@ def process_image(request, uploaded_image_id):
 
         noisy_image = add_gaussian_noise(image_float, mean=0, var=0.01)
 
-        wavelets = ['db1', 'db2', 'sym2', 'haar']
+        wavelets = ['bior4.4', 'db4', 'sym4']
         levels = [1, 2]
         threshold_factors = [0.1, 0.2]
         threshold_modes = ['soft', 'hard']

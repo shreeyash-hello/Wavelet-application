@@ -49,7 +49,7 @@ def resize_image(image, target_shape):
 
 def psnr(original, decrypted):
     mse = np.mean((original - decrypted) ** 2)
-    if mse == 0:  # Means no difference between the images
+    if mse == 0:
         return float('inf')
     max_pixel = 255.0
     psnr_value = 20 * np.log10(max_pixel / np.sqrt(mse))
