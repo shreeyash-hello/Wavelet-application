@@ -1,10 +1,7 @@
-import numpy as np
-import matplotlib.pyplot as plt
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.shortcuts import render
 import numpy as np
-import pywt
 import matplotlib.pyplot as plt
 import PIL.Image
 import base64
@@ -14,10 +11,8 @@ from .models import UploadedImage, EncryptedData
 from .forms import UploadImageForm
 from .encryption import chaotic_wavelet_encrypt, chaotic_wavelet_decrypt, resize_image, psnr
 from .compression import compress_image, decompress_image, calculate_compression_ratio, calculate_psnr
-from skimage import io, img_as_float, metrics
-from skimage.restoration import denoise_nl_means
+from skimage import io, img_as_float
 import os
-import rawpy
 from PIL import Image
 
 
@@ -114,11 +109,8 @@ def compress_image_view(request, uploaded_image_id):
     if request.method == 'POST':
         image_path = uploaded_image.image.path
 
-        with rawpy.imread(image_path) as raw:
-            rgb_array = raw.postprocess()
-
-        rgb_image = Image.fromarray(rgb_array)
-        grayscale_image = rgb_image.convert('L')
+        rgb_image = Image.open(image_path)
+        grayscale_image = np.array(rgb_image)
         original_array = np.array(grayscale_image)
 
         encoded_coeffs, wavelet_coeffs, original_size, compressed_size = compress_image(original_array)

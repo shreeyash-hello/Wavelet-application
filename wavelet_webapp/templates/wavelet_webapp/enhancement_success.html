@@ -3,28 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Results</title>
+    <style>
+        .image-container {
+            display: flex;
+            gap: 10px; /* Reduced space between images */
+            margin-bottom: 20px;
+        }
+        .image-container img {
+            max-width: 150%; /* Adjusted to make images larger */
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .summary {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>Results</h1>
 
-    <h2>Original Image</h2>
-    <img src="data:image/png;base64,{{ original_image }}" alt="Original Image">
-
-    <h2>Noisy Image</h2>
-    <img src="data:image/png;base64,{{ noisy_image }}" alt="Noisy Image">
-
-    <h2>Best Denoised Image (PSNR)</h2>
-    <img src="data:image/png;base64,{{ best_denoised_psnr }}" alt="Best Denoised Image (PSNR)">
-
-    <h2>Best Denoised Image (SSIM)</h2>
-    <img src="data:image/png;base64,{{ best_denoised_ssim }}" alt="Best Denoised Image (SSIM)">
+    <h2>Images Comparison</h2>
+    <div class="image-container">
+        <div>
+            <h3>Noisy Image</h3>
+            <img src="data:image/png;base64,{{ noisy_image }}" alt="Noisy Image">
+        </div>
+        <div>
+            <h3>Denoised Image</h3>
+            <img src="data:image/png;base64,{{ best_denoised_psnr }}" alt="Best Denoised Image (PSNR)">
+        </div>
+    </div>
 
     <h2>Results Summary</h2>
-    <p>Operation Selected: {{ operation }}</p>
-    <p>Best PSNR: {{ best_psnr }}</p>
-    <p>Best Parameters for PSNR: Wavelet={{ best_params_psnr.0 }}, Level={{ best_params_psnr.1 }}, Threshold={{ best_params_psnr.2 }}, Mode={{ best_params_psnr.3 }}</p>
-    <p>Best SSIM: {{ best_ssim }}</p>
-    <p>Best Parameters for SSIM: Wavelet={{ best_params_ssim.0 }}, Level={{ best_params_ssim.1 }}, Threshold={{ best_params_ssim.2 }}, Mode={{ best_params_ssim.3 }}</p>
+    <div class="summary">
+        <p>Operation Selected: {{ operation }}</p>
+        <p>Best PSNR: {{ best_psnr }}</p>
+        <p>Best Parameters for PSNR: Wavelet={{ best_params_psnr.0 }}, Level={{ best_params_psnr.1 }}, Threshold={{ best_params_psnr.2 }}, Mode={{ best_params_psnr.3 }}</p>
+    </div>
 
     <a href="{% url 'home' %}">Go to Home</a>
 </body>

@@ -12,10 +12,6 @@
 
     <p><a href="{{ decompressed_image_path }}" download>Download Decompressed Image</a></p>
 
-    <h3>Compression Details:</h3>
-    <p>Original Image Size: {{ original_size }} pixels</p>
-    <p>Compressed Image Size: {{ compressed_size }} pixels</p>
-    <p>Compression Ratio: {{ compression_ratio|floatformat:2 }}</p>
     <p>PSNR: {{ psnr_value|floatformat:2 }} dB</p>
 
     <a href="{% url 'home' %}">Go to Home</a>
