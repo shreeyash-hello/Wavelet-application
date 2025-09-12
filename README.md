@@ -20,7 +20,7 @@ The processed image is reconstructed using the **Inverse Discrete Wavelet Transf
 
 The diagram below shows the flow of the application:
 
-![System Architecture](system_arch.png)
+![System Architecture](SYS.png)
 
 1. User uploads an image via the **browser interface**.  
 2. The server applies **DWT** to decompose the image.  
