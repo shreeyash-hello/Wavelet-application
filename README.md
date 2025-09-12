@@ -25,7 +25,7 @@ Users can upload images and apply operations such as:
 
 ## 🛠 Tech Stack
 - **Backend:** Python, Django  
-- **Image Processing:** PyWavelets, NumPy, OpenCV (if used)  
+- **Image Processing:** PyWavelets, NumPy
 - **Frontend:** HTML, CSS, Django Templates  
 - **Database:** SQLite  
 
