@@ -1,4 +1,4 @@
-# 🌊 Wavelet Application
+# 🌊 Wavelet Application (Detailed Report.md file)
 
 A Django web application that demonstrates **image encryption, compression, and denoising** using **Wavelet transforms**.  
 This project combines **signal/image processing** with a **web interface**, showing how wavelet-based methods can be applied in practice.
