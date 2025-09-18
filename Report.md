@@ -75,17 +75,24 @@ A one-sentence non-technical summary:
 ### A. Visual evidence
 
 1. **Original image (left)** — **Compressed (right)**  
-<img src="Screenshots/example.png" alt="Original" width="250"/>  
-<img src="Screenshots/example.png" alt="Compressed" width="250"/>  
+<p>
+  <img src="Screenshots/example.png" alt="Original" width="250"/>
+  <img src="Screenshots/example.png" alt="Compressed" width="250"/>
+</p>
 
 2. **Noisy image (left)** — **Denoised (right)**  
-<img src="Screenshots/noisy_boat.png" alt="Noisy" width="250"/>  
-<img src="Screenshots/denoisy_boat.png" alt="Denoised" width="250"/>  
+<p>
+  <img src="Screenshots/noisy_boat.png" alt="Noisy" width="250"/>
+  <img src="Screenshots/denoisy_boat.png" alt="Denoised" width="250"/>
+</p>
 
 3. **Original** — **Encrypted** — **Decrypted**  
-<img src="Screenshots/park.png" alt="Original" width="250"/>  
-<img src="Screenshots/encrypted_image.png" alt="Encrypted" width="250"/>  
-<img src="Screenshots/park.png" alt="Decrypted" width="250"/>    
+<p>
+  <img src="Screenshots/park.png" alt="Original" width="250"/>
+  <img src="Screenshots/encrypted_image.png" alt="Encrypted" width="250"/>
+  <img src="Screenshots/park.png" alt="Decrypted" width="250"/>
+</p>
+    
 
 ---
 
