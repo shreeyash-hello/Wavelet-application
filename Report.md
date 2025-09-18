@@ -75,13 +75,13 @@ A one-sentence non-technical summary:
 ### A. Visual evidence
 
 1. **Original image (left)** — **Compressed (right)**  
-![Original](Screenshots/original.png) ![Compressed](Screenshots/compressed.png)  
+![Original](Screenshots/example.png) ![Compressed](Screenshots/example.png)  
 
 2. **Noisy image (left)** — **Denoised (right)**  
-![Noisy](Screenshots/noisy.png) ![Denoised](Screenshots/denoised.png)  
+![Noisy](Screenshots/noisy_boat.png) ![Denoised](Screenshots/denoisy_boat.png)  
 
 3. **Original** — **Encrypted** — **Decrypted**  
-![Original](Screenshots/original.png) ![Encrypted](Screenshots/encrypted.png) ![Decrypted](Screenshots/decrypted.png)  
+![Original](Screenshots/park.png) ![Encrypted](Screenshots/encrypted_image.png) ![Decrypted](Screenshots/park.png)  
 
 ---
 
