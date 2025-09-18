@@ -72,7 +72,7 @@ A one-sentence non-technical summary:
 
 ## 3. Results — visual + numeric
 
-### A. Visual evidence (place images here)
+### A. Visual evidence
 
 1. **Original image (left)** — **Compressed (right)**  
 ![Original](Screenshots/original.png) ![Compressed](Screenshots/compressed.png)  
@@ -85,7 +85,7 @@ A one-sentence non-technical summary:
 
 ---
 
-### B. Key numeric tables (copy these examples into the report)
+### B. Key numeric tables
 
 #### Table 1 — Encryption: original vs encrypted file sizes
 | Image | Original size (KB) | Encrypted (.npz) size (KB) |
@@ -97,7 +97,7 @@ A one-sentence non-technical summary:
 | Male | 1,048 | 5,300 |
 *Source: experiment data.*  
 
-#### Table 2 — Compression results (example)
+#### Table 2 — Compression results
 | Image | Original (bytes) | Compressed (bytes) | % Reduction |
 |---|---:|---:|---:|
 | Clock | 65,536 | 28,098 | 57.12% |
@@ -107,7 +107,7 @@ A one-sentence non-technical summary:
 | Male | 1,048,576 | 764,966 | 27.04% |
 *Source: experiment data.*  
 
-#### Table 3 — Denoising: PSNR (example)
+#### Table 3 — Denoising: PSNR
 | Image | PSNR (dB) |
 |---|---:|
 | Clock | 38.94 |
@@ -120,7 +120,7 @@ A one-sentence non-technical summary:
 
 ---
 
-## 4. Short technical note (for interested readers)
+## 4. Short technical note
 - **Wavelets used:** Haar (simple and fast), Biorthogonal (bior4.4), Daubechies (db4), Symlet (sym4). Several are tested and compared.  
 - **Encryption method:** Apply Discrete Wavelet Transform (DWT), flatten coefficients, permute using a chaotic map (logistic map), store indices and permuted coefficients in a `.npz` file. This is reversible with the saved indices/keys.  
 - **Compression steps:** DWT → quantisation (divide coefficients by a factor) → thresholding (set very small values to zero using standard deviation) → Run Length Encoding (RLE) → save compressed representation.  
@@ -128,7 +128,7 @@ A one-sentence non-technical summary:
 
 ---
 
-## 5. How to use the web app (user steps)
+## 5. How to use the web app
 1. Open the homepage (run the Django server via `python manage.py runserver` for local use).  
 2. Choose **Upload Image** and select your file.  
 3. Select **Compress**, **Denoise**, or **Encrypt** from the options.  
