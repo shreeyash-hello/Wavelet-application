@@ -36,7 +36,7 @@ A one-sentence non-technical summary:
 
 ---
 
-## 1. How it works — in plain words
+## 1. How it works
 1. **Upload** an image from your computer.  
 2. **Choose** one of three options: Compress, Denoise, or Encrypt.  
 3. The server **processes** the image using wavelet math in the background.  
