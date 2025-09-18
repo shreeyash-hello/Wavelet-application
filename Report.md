@@ -6,7 +6,7 @@
 
 ---
 
-## 📌 Quick summary (for anyone)
+## 📌 Quick summary
 This is a web application (built with **Python / Django**) that applies **wavelet transforms** to images to:
 - **Compress** images (make files smaller but keep them looking close to the original),  
 - **Denoise** images (remove grain or unwanted noise), and  
